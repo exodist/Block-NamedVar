@@ -11,7 +11,7 @@ my $build = Module::Build->new(
     requires => {
         'Devel::Declare::Parser' => 0.011,
     },
-    tests_require => {
+    build_requires => {
         'Fennec' => 0.018,
     },
     meta_merge => {
