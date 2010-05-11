@@ -2,7 +2,7 @@ package Block::NamedVar;
 use strict;
 use warnings;
 
-our $VERSION = "0.002";
+our $VERSION = "0.003";
 
 use base 'Devel::Declare::Parser';
 
@@ -106,8 +106,7 @@ sub _scope_end {
 
 sub _open {
     my $self = shift;
-    my $start = $self->prefix;
-    return $start . $self->name . " ";
+    return "";
 }
 
 1;

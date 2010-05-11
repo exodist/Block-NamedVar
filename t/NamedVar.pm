@@ -8,25 +8,25 @@ BEGIN {
 }
 use Block::NamedVar;
 
-tests 'ngrep' => sub {
+tests ngrep {
     my @list = ngrep my $x { $x =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is_deeply(
         \@list,
         [qw/a b c/],
         "filtered as expected"
     );
-};
+}
 
-tests 'nmap' => sub {
+tests nmap {
     my @list = nmap my $x { "updated_$x" } qw/ a b c /;
     is_deeply(
         \@list,
         [qw/updated_a updated_b updated_c/],
         "mapped as expected"
     );
-};
+}
 
-tests 'edge' => sub {
+tests edge {
     my @list = ngrep
         my
             $x
@@ -39,9 +39,9 @@ tests 'edge' => sub {
         [qw/a b c/],
         "filtered as expected staircased"
     );
-};
+}
 
-tests 'count and vartypes' => sub {
+tests 'count and vartypes' {
     my $count = ngrep my $x { $x =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is( $count, 3, "counts properly" );
 
@@ -55,6 +55,6 @@ tests 'count and vartypes' => sub {
 
     $count = ngrep thing { $thing =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is( $count, 3, "shorthand new variable" );
-};
+}
 
 1;
