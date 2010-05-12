@@ -5,6 +5,42 @@ use Fennec;
 
 use Block::NamedVar;
 
+tests nfor {
+    nfor my ( $x, $y, $z ) ( qw/a b c x y z/ ) {
+        ok( $x eq 'a' || $x eq 'x', "First" );
+        ok( $y eq 'b' || $y eq 'y', "Second" );
+        ok( $z eq 'c' || $z eq 'z', "Third" );
+    }
+
+    my %thing = ( a => 'x', b => 'y' );
+    nfor my ( $key, $val ) ( %thing ) {
+        ok( $key eq 'a' || $key eq 'b', "key" );
+        ok( $val eq 'x' || $val eq 'y', "val" );
+    }
+
+    $a = 55;
+    nfor ( %thing ) {
+        ok( $a eq 'a' || $a eq 'b', "key" );
+        ok( $b eq 'x' || $b eq 'y', "val" );
+    }
+    is( $a, 55, "\$a was localized" );
+
+    nfor $a ( qw/a/ ) {
+        is( $a, 'a', "One arg" );
+    }
+
+    nfor my $x ( qw/a/ ) {
+        is( $x, 'a', "One arg" );
+    }
+
+    my $last;
+    nfor my $x ( qw/a b c/ ) {
+        $last = $x;
+        last;
+    }
+    is( $last, 'a', "Broke loop with last" );
+}
+
 tests ngrep {
     my @list = ngrep my $x { $x =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is_deeply(
