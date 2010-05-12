@@ -2,7 +2,7 @@ package Block::NamedVar;
 use strict;
 use warnings;
 
-our $VERSION = "0.005";
+our $VERSION = "0.006";
 
 use Devel::Declare::Interface;
 Devel::Declare::Interface::register_parser( 'map_var', 'Block::NamedVar::MapLike' );
@@ -50,8 +50,8 @@ The difference is you can name the block variable instead of relying on $_. You
 can also turn custom map/grep like functions into keywords that act like nmap
 and ngrep.
 
-Gives you nfor which is like for except you can loop over multiple elements of
-the array at once. If given a hash you can get the key and the value each
+Gives you nfor which is like 'for' except you can loop over multiple elements
+of the array at once. If given a hash you can get the key and the value each
 iteration. Implemented such that it does not suffer the problems of each().
 
 =head1 SYNOPSIS
@@ -79,8 +79,8 @@ iteration. Implemented such that it does not suffer the problems of each().
 
 =item nfor my ( $vara, $varb, ... ) ( @list ) { ... }
 
-like for, except that you can take any number of elements from the array per
-iteration. Loop controsl like next and last work as expected.
+like 'for', except that you can take any number of elements from the array per
+iteration. Loop controls like 'next' and 'last' work as expected.
 
 =item nfor ( key => 'value' ) { $a == 'key', $b == 'value' }
 
