@@ -3,9 +3,6 @@ use strict;
 use warnings;
 use Fennec;
 
-BEGIN {
-    use_ok( 'Block::NamedVar' );
-}
 use Block::NamedVar;
 
 tests ngrep {

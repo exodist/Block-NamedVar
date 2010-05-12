@@ -1,40 +1,83 @@
-package Block::NamedVar;
+package Block::NamedVar::Parser;
 use strict;
 use warnings;
 
 our $VERSION = "0.004";
 
 use Devel::Declare::Interface;
-Devel::Declare::Interface::register_parser( 'named_var', 'Block::NamedVar::Parser' );
+use base 'Devel::Declare::Parser';
+
+Devel::Declare::Interface::register_parser( 'named_var' );
+__PACKAGE__->add_accessor( $_ ) for qw/dec var/;
 
 our @DEFAULTS = qw/nmap ngrep/;
 
-sub ngrep {
-    local $_;
-    my $code = shift;
-    grep { $code->() } @_;
-}
+sub rewrite {
+    my $self = shift;
 
-sub nmap {
-    local $_;
-    my $code = shift;
-    map { $code->() } @_;
-}
-
-sub import {
-    my $class = shift;
-    my $caller = caller;
-
-    my @args = @_;
-    @args = @DEFAULTS unless @args;
-
-    my @export = grep { m/^n(grep|map)$/ } @args;
-    for ( @export ) {
-        no strict 'refs';
-        *{ $caller . '::' . $_ } = \&$_;
+    if ( @{ $self->parts } > 2 ) {
+        ( undef, my @bad ) = @{ $self->parts };
+        $self->bail(
+            "Syntax error near: " . join( ' and ',
+                map { $self->format_part($_)} @bad
+            )
+        );
     }
 
-    Devel::Declare::Interface::enhance( $caller, $_, 'named_var' ) for @args;
+    my ($first, $second) = @{ $self->parts };
+    my ( $dec, $var ) = ("");
+    if ( @{ $self->parts } > 1 ) {
+        $self->bail(
+            "Syntax error near: " . $self->format_part($first)
+        ) unless grep { $first->[0] eq $_ } qw/my our/;
+        $dec = $first;
+        $var = $second;
+    }
+    else {
+        $var = $first;
+        $dec = ['my'] if ref $self->parts->[0];
+    }
+
+    $var = $self->format_var( $var );
+    $self->dec( $dec );
+    $self->var( $var );
+
+    $self->new_parts([]);
+    1;
+}
+
+sub format_var {
+    my $self = shift;
+    my ( $var ) = @_;
+    if ( ref $var ) {
+        $var = $var->[0];
+    }
+    return $var if $var =~ m/^\$\w[\w\d_]*$/;
+    return "\$$var" if $var =~ m/^\w[\w\d_]*$/;
+    $self->bail( "Syntax error, '$var' is not a valid block variable name" );
+}
+
+sub inject {
+    my $self = shift;
+    my $dec = $self->dec ? $self->dec->[0] : '';
+    my $var = $self->var;
+    return ( "$dec $var = \$_" );
+}
+
+sub _scope_end {
+    my $class = shift;
+    my ( $id ) = @_;
+    my $self = Devel::Declare::Parser::_unstash( $id );
+
+    my $linestr = $self->line;
+    $self->offset( $self->_linestr_offset_from_dd() );
+    substr($linestr, $self->offset, 0) = ', ';
+    $self->line($linestr);
+}
+
+sub open_line {
+    my $self = shift;
+    return "";
 }
 
 1;

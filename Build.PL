@@ -9,10 +9,10 @@ my $build = Module::Build->new(
     dist_author => 'Chad Granum <exodist7@gmail.com>',
     create_readme => 1,
     requires => {
-        'Devel::Declare::Parser' => 0.012,
+        'Devel::Declare::Parser' => 0.014,
     },
     build_requires => {
-        'Fennec' => 0.019,
+        'Fennec' => 0.020,
     },
     meta_merge => {
         resources => {
