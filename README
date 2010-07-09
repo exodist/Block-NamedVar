@@ -8,7 +8,7 @@ DESCRIPTION
     relying on $_. You can also turn custom map/grep like functions into
     keywords that act like nmap and ngrep.
 
-    Gives you nfor which is like for except you can loop over multiple
+    Gives you nfor which is like 'for' except you can loop over multiple
     elements of the array at once. If given a hash you can get the key and
     the value each iteration. Implemented such that it does not suffer the
     problems of each().
@@ -33,8 +33,8 @@ SYNOPSIS
 
 EXPORTED FUNCTIONS
     nfor my ( $vara, $varb, ... ) ( @list ) { ... }
-        like for, except that you can take any number of elements from the
-        array per iteration. Loop controsl like next and last work as
+        like 'for', except that you can take any number of elements from the
+        array per iteration. Loop controls like 'next' and 'last' work as
         expected.
 
     nfor ( key => 'value' ) { $a == 'key', $b == 'value' }
