@@ -12,7 +12,7 @@ my $build = Module::Build->new(
         'Devel::Declare::Parser' => 0.014,
     },
     build_requires => {
-        'Fennec' => 0.026,
+        'Fennec' => 2.017,
     },
     meta_merge => {
         resources => {

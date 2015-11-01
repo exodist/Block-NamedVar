@@ -1,11 +1,10 @@
-package TEST::Block::NamedVar;
 use strict;
 use warnings;
 use Fennec;
 
 use Block::NamedVar;
 
-tests nfor {
+tests nfor => sub {
     nfor my ( $x, $y, $z ) ( qw/a b c x y z/ ) {
         ok( $x eq 'a' || $x eq 'x', "First" );
         ok( $y eq 'b' || $y eq 'y', "Second" );
@@ -39,27 +38,27 @@ tests nfor {
         last;
     }
     is( $last, 'a', "Broke loop with last" );
-}
+};
 
-tests ngrep {
+tests ngrep => sub {
     my @list = ngrep my $x { $x =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is_deeply(
         \@list,
         [qw/a b c/],
         "filtered as expected"
     );
-}
+};
 
-tests nmap {
+tests nmap => sub {
     my @list = nmap my $x { "updated_$x" } qw/ a b c /;
     is_deeply(
         \@list,
         [qw/updated_a updated_b updated_c/],
         "mapped as expected"
     );
-}
+};
 
-tests edge {
+tests edge => sub {
     my @list = ngrep
         my
             $x
@@ -72,9 +71,9 @@ tests edge {
         [qw/a b c/],
         "filtered as expected staircased"
     );
-}
+};
 
-tests 'count and vartypes' {
+tests 'count and vartypes' => sub {
     my $count = ngrep my $x { $x =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is( $count, 3, "counts properly" );
 
@@ -88,6 +87,6 @@ tests 'count and vartypes' {
 
     $count = ngrep thing { $thing =~ m/^[a-zA-Z]$/ } qw/ a 1 b 2 c 3/;
     is( $count, 3, "shorthand new variable" );
-}
+};
 
-1;
+done_testing;

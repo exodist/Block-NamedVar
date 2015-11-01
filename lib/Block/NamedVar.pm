@@ -2,7 +2,7 @@ package Block::NamedVar;
 use strict;
 use warnings;
 
-our $VERSION = "0.007";
+our $VERSION = "0.008";
 
 use Devel::Declare::Interface;
 Devel::Declare::Interface::register_parser( 'map_var', 'Block::NamedVar::MapLike' );
